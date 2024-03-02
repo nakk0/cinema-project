@@ -1,0 +1,12 @@
+/login
+username string, password string
+status 200 se successo, 401 se non successo, 400 se manca argomenti
+
+/register
+
+status 200 se successo, 403 gia esistente, 400 se manca argomenti
+
+
+/rendiattori
+
+out attori
