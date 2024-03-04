@@ -115,12 +115,12 @@ CREATE TABLE `review` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rating` int(11) DEFAULT NULL CHECK (`rating` between 1 and 5),
   `movie_id` int(11) DEFAULT NULL,
-  `username` varchar(32) DEFAULT NULL,
+  `account_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `movie_id` (`movie_id`),
   KEY `username` (`username`),
   FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`),
-  FOREIGN KEY (`username`) REFERENCES `account` (`username`)
+  FOREIGN KEY (`username`) REFERENCES `account` (`id`)
 )
 
 -- Table: `studios`
