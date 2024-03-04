@@ -5,8 +5,7 @@ use Slim\Factory\AppFactory;
 
 require __DIR__ . '/vendor/autoload.php';
 //sopra non toccare poi cancella questo quando finito
-require 
-
+//require i file delle classi
 session_cache_limiter(false);
 session_start();
 
@@ -21,14 +20,27 @@ $app->get('/', function (Request $request, Response $response, $args) {
 
 $app->post('/login', function (Request $request, Response $response, $args) {
     $result = [];
-
-
-        //codicione pazzo
-
-
-
     $body = $request->getParsedBody();
     $_SESSION["username"] = $body["username"];
+
+
+    $result["usename"] = $body["username"];
+    $result["psw"] = $body["password"];
+    $response->getBody()->write(json_encode($result));
+
+    
+
+    return $response;
+});
+
+$app->post('/login', function (Request $request, Response $response, $args) {
+    $result = [];
+    $body = $request->getParsedBody();
+    $_SESSION["username"] = $body["username"];
+
+
+    $result["usename"] = $body["username"];
+    $result["psw"] = $body["password"];
     $response->getBody()->write(json_encode($result));
 
     
