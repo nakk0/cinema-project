@@ -4,7 +4,7 @@ class Movie {
     private $id;
     private $title;
     private $release_date;
-    private $original_language;  // Fix the property name
+    private $original_language;
     private $description;
     private $director;
     private $poster;
@@ -14,14 +14,14 @@ class Movie {
         $this->id = $id;
         $this->title = $title;
         $this->release_date = $release_date;
-        $this->original_language = $original_language;  // Fix the property name
+        $this->original_language = $original_language;
         $this->description = $description;
         $this->director = $director;
         $this->poster = $poster;
     }
 
     public function addLanguage(string $language) {
-        $this->languages[] = $language;  // Fix the property name
+        $this->languages[] = $language;
     }
 
     

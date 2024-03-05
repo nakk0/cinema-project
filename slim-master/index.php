@@ -7,7 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . "/connection.php";
 require __DIR__ . "/classi/Database.php";
 require __DIR__ . "/classi/Movie.php";
-
+require __DIR__ . "/classi/Actor.php";
 //sopra non toccare poi cancella questo quando finito
 //require i file delle classi
 session_cache_limiter(false);
@@ -22,6 +22,15 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
+
+
+
+
+
+
+
+
+
 $app->get('/getMovies', function (Request $request, Response $response, $args) {
     $return = [];
     $conn = new Database();
@@ -29,28 +38,63 @@ $app->get('/getMovies', function (Request $request, Response $response, $args) {
 
     $conn = new mysqli("mariadb", "root", "", "cinema");
 
-    
-    
-    
-
     $query = "SELECT movies.*, languages.name AS original_language_name, directors.name AS director_name
           FROM movies
           LEFT JOIN languages ON movies.original_language = languages.id
           LEFT JOIN directors ON movies.director = directors.id";
-$result = $conn->query($query);
+    $result = $conn->query($query);
 
-$movies = [];
+    $movies = [];
 
-if ($result->num_rows == 0) {
-    $return["error"] = true;
-} else {
-    while ($row = $result->fetch_assoc()) {
-        $temp = new Movie($row["id"], $row["title"], $row["release_date"], $row["original_language_name"], $row["description"], $row["director_name"], $row["poster"]);
-        $return[] = $temp->toArray();
-    }
+    if ($result->num_rows == 0) {
+        $return["error"] = true;
+    } else {
+        while ($row = $result->fetch_assoc()) {
+            $temp = new Movie($row["id"], $row["title"], $row["release_date"], $row["original_language_name"], $row["description"], $row["director_name"], $row["poster"]);
+            $return[] = $temp->toArray();
+        }
     
-}
+    }
 
+    // Chiudi la connessione al database quando hai finito
+    $conn->close();
+
+    $response->getBody()->write(json_encode($return));
+
+    return $response;
+});
+
+
+
+
+
+
+
+
+$app->get('/getActorsByFilm', function (Request $request, Response $response, $args) {
+    $return = [];
+    $conn = new Database();
+    $conn->getDatabase();
+    $conn = new mysqli("mariadb", "root", "", "cinema");
+
+    $body = $request->getParsedBody();
+    $id = $body["id"];
+
+    $query = "SELECT actors.*
+                FROM actors
+                JOIN actors_movies ON actors_movies.actor_id = actors.id
+                WHERE movie_id = $id";
+    $result = $conn->query($query);
+
+    if ($result->num_rows == 0) {
+        $return["error"] = "nessun attore trovato, id film : " . $id ;
+    } else {
+        while ($row = $result->fetch_assoc()) {
+            $temp = new Actor($row["id"], $row["name"], $row["surname"], $row["birthday"], $row["nationality"], $row["photo"]);
+            $return[] = $temp->toArray();
+        }
+    
+    }
 
     // Chiudi la connessione al database quando hai finito
     $conn->close();
