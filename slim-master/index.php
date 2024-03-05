@@ -71,13 +71,13 @@ $app->get('/getMovies', function (Request $request, Response $response, $args) {
 
 
 
-$app->get('/getActorsByFilm', function (Request $request, Response $response, $args) {
+$app->get('/getActorsByMovie', function (Request $request, Response $response, $args) {
     $return = [];
     $conn = new Database();
     $conn->getDatabase();
     $conn = new mysqli("mariadb", "root", "", "cinema");
 
-    $body = $request->getParsedBody();
+    $body = $request->getQueryParams();
     $id = $body["id"];
 
     $query = "SELECT actors.*
