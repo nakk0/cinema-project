@@ -4,6 +4,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . "/connection.php";
 //sopra non toccare poi cancella questo quando finito
 //require i file delle classi
 session_cache_limiter(false);
@@ -18,29 +19,13 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->post('/login', function (Request $request, Response $response, $args) {
+$app->post('/getFilm', function (Request $request, Response $response, $args) {
     $result = [];
-    $body = $request->getParsedBody();
-    $_SESSION["username"] = $body["username"];
-
-
-    $result["usename"] = $body["username"];
-    $result["psw"] = $body["password"];
-    $response->getBody()->write(json_encode($result));
-
+    //$body = $request->getParsedBody();
+    $sql = "SELECT * FROM film";
+    $result = $conn->query($sql);
     
-
-    return $response;
-});
-
-$app->post('/login', function (Request $request, Response $response, $args) {
-    $result = [];
-    $body = $request->getParsedBody();
-    $_SESSION["username"] = $body["username"];
-
-
-    $result["usename"] = $body["username"];
-    $result["psw"] = $body["password"];
+    //$result["usename"] = $body["username"];
     $response->getBody()->write(json_encode($result));
 
     

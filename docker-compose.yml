@@ -9,8 +9,10 @@ services:
     restart: always
     environment:
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: cinema
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
 
@@ -31,7 +33,7 @@ services:
 
   # Apache container with PHP
   webserver:
-    image: benvenuti/php-composer:1.1
+    build: .
     container_name: apache-php
     restart: always
     depends_on:

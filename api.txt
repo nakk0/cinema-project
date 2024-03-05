@@ -15,7 +15,7 @@ json di oggetti Genre
 IdFilm number
 json di oggetti Actors
 
-/getReviewByFilm
+/getReviewsByFilm
 IdFilm number
 json di oggetti Review
 
