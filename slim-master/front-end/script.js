@@ -1,25 +1,43 @@
-axios.get("http://localhost/getMovies").then(response =>{
-    response.data.forEach(a =>{
-        console.log(a);
+axios.get("http://localhost/getMovies").then(response => {
+    response.data.forEach(movie => {
+        console.log(movie);
+        let father = document.getElementById("list");
         let div = document.createElement("div");
-        let classes = ["bg-red-300", "max-h-96", "min-h-96", "max-w-72", "min-w-72", "p-4"]
-        classes.forEach(c =>{
+        let divClasses = [
+            "bg-red-300", 
+            "max-h-72", 
+            "min-h-72", 
+            "max-w-80", 
+            "min-w-80", 
+            "p-4", 
+            "bg-gradient-to-br", 
+            "from-purple-600",
+            "to-purple-900",
+            "rounded-xl"
+        ]
+        divClasses.forEach(c => {
             div.classList.add(c);
         })
-        //finish building the div
-        document.getElementById("list").appendChild(div);
+
+        image = new Image;
+        image.src = movie.poster;
+        div.appendChild(image);
+
+        //add 2 <p> for title and for review average and one below for description (follow example)
+        
+        father.appendChild(div);
     })
-}).catch(error =>{
+}).catch(error => {
     console.log(error);
 })
 
 axios.get("http://localhost/getActorsByMovie", {
-    params:{
+    params: {
         id: '2'
     }
-}).then(response =>{
+}).then(response => {
     console.log(response);
-}).catch(err =>{
+}).catch(err => {
     console.log(err);
 })
 
