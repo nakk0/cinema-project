@@ -8,7 +8,7 @@ $connection_string = $_ENV["MYSQL_PRIVATE_URL"];
 
 if (isset($connection_string)) {
   $pattern = "/mysql:\/\/([^:]+):([^@]+)@([^:\/]+):(\d+)\/(.+)/";
-  preg_match($pattern, $connectionString, $matches);
+  preg_match($pattern, $connection_string, $matches);
 
   $username = $matches[1];
   $password = $matches[2];
