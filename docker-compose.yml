@@ -30,11 +30,13 @@ services:
       PMA_PASSWORD: ''
     ports:
       - "8080:80"
-
-  # Apache container with PHP
-  webserver:
-    build: .
+  webserver-dev:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     container_name: apache-php
+    volumes:
+      - ./slim-master/:/var/www/html
     restart: always
     depends_on:
       - mariadb
