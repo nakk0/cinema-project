@@ -36,7 +36,7 @@ services:
       dockerfile: dev.Dockerfile
     container_name: apache-php
     volumes:
-      - "./slim-master:/var/www/html"
+      - ./slim-master/:/var/www/html
     restart: always
     depends_on:
       - mariadb
