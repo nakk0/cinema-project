@@ -4,7 +4,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . "/connection.php";
 require __DIR__ . "/classi/Database.php";
 require __DIR__ . "/classi/Movie.php";
 require __DIR__ . "/classi/Actor.php";
@@ -22,21 +21,9 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-
-
-
-
-
-
-
-
-
 $app->get('/getMovies', function (Request $request, Response $response, $args) {
     $return = [];
-    $conn = new Database();
-    $conn->getDatabase();
-
-    $conn = new mysqli("mariadb", "root", "", "cinema");
+    $conn = Database::getDatabase();
 
     $query = "SELECT movies.*, languages.name AS original_language_name, directors.name AS director_name
           FROM movies
@@ -46,14 +33,9 @@ $app->get('/getMovies', function (Request $request, Response $response, $args) {
 
     $movies = [];
 
-    if ($result->num_rows == 0) {
-        $return["error"] = true;
-    } else {
-        while ($row = $result->fetch_assoc()) {
-            $temp = new Movie($row["id"], $row["title"], $row["release_date"], $row["original_language_name"], $row["description"], $row["director_name"], $row["poster"]);
-            $return[] = $temp->toArray();
-        }
-    
+    while ($row = $result->fetch_assoc()) {
+        $temp = new Movie($row["id"], $row["title"], $row["release_date"], $row["original_language_name"], $row["description"], $row["director_name"], $row["poster"]);
+        $return[] = $temp->toArray();
     }
 
     // Chiudi la connessione al database quando hai finito
@@ -73,9 +55,7 @@ $app->get('/getMovies', function (Request $request, Response $response, $args) {
 
 $app->get('/getActorsByMovie', function (Request $request, Response $response, $args) {
     $return = [];
-    $conn = new Database();
-    $conn->getDatabase();
-    $conn = new mysqli("mariadb", "root", "", "cinema");
+    $conn = Database::getDatabase();
 
     $body = $request->getQueryParams();
     $id = $body["id"];
