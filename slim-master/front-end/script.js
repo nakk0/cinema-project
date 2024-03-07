@@ -3,25 +3,23 @@ axios.get("http://localhost/getMovies").then(response => {
         console.log(movie);
         let father = document.getElementById("list");
         let div = document.createElement("div");
-        let divClasses = [
-            "bg-red-300", 
-            "max-h-72", 
-            "min-h-72", 
-            "max-w-80", 
-            "min-w-80", 
-            "p-4", 
-            "bg-gradient-to-br", 
-            "from-purple-600",
-            "to-purple-900",
-            "rounded-xl"
-        ]
-        divClasses.forEach(c => {
-            div.classList.add(c);
-        })
+
+        div.classList.add(
+            "group", 
+            "text-white", 
+            "transition-all", 
+            "ease-in-out", 
+            "delay-150",
+            "duration-500", 
+            "transform",
+            "hover:translate-y-1",  
+            "hover:scale-150",
+            "hover:bg-gray-800",
+            "hover:z-10")
 
         image = new Image;
-        image.src = movie.poster;
-        div.appendChild(image);
+        image.src = "https://picsum.photos/300/200"; //remember to change with move.poster
+        //div.appendChild(image);
 
         //add 2 <p> for title and for review average and one below for description (follow example)
         

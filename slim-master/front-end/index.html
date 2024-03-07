@@ -9,21 +9,35 @@
     <script src="./script.js"></script>
 </head>
 <body>
-    <div class="text-center bg-gradient-to-r from-purple-600 to-indigo-600 p-3">
-        <p class="text-4xl text-white">CINEMA</p>
-    </div>
-    <!-- quest div è una bozza dei div che dovranno essere costruiti col js
-        con i dati presi dall'api, è qui solo a scopo dimostrativo-->
-    <div class="grid min-[1625px]:grid-cols-5 min-[1305px]:grid-cols-4 lg:grid-cols-3 min-[665px]:grid-cols-2 place-items-center p-5 gap-5" id="list">
-        <div class="max-h-72 min-h-72 max-w-80 min-w-80 p-4 bg-gradient-to-br from-purple-600 to-purple-900 rounded-xl text-white">
-            <img src="https://picsum.photos/300/200">
-            <div class="flex justify-end">
-                <p class="text-xl font-bold truncate">title</p>
-                <p class="ml-auto">avg/5</p>
+    <div class="min-h-screen bg-black">
+        <div class="bg-gray-800 py-5 px-10">
+            <p class="text-3xl text-red-500 font-bold">Nitflex</p>
+        </div>
+        <!-- quest div è una bozza dei div che dovranno essere costruiti col js
+            con i dati presi dall'api, è qui solo a scopo dimostrativo-->
+        <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 place-items-center m-5 gap-5"
+            id="list">
+            <!-- <div class="text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-150 duration-500">
+                <img src="https://picsum.photos/300/200">
+                <div class="">
+                    <div class="flex justify-end">
+                        <p class="text-xl font-bold truncate">title</p>
+                        <p class="ml-auto">avg/5</p>
+                    </div>
+                    <p>this is a description</p>
+                </div>
+            </div> -->
+            <div class="group text-white transition-all ease-in-out delay-150 duration-500 transform hover:translate-y-1 hover:scale-150 hover:bg-gray-800 hover:z-10 hover:translate-x-10">
+                <img src="https://picsum.photos/300/200" class="w-full h-auto">
+                <div class="bg-gray-800 opacity-0 group-hover:opacity-100 transition-all ease-in-out delay-150 duration-500 min-w-min p-3">
+                    <div class="flex justify-end">
+                        <p class="text-xl font-bold truncate">Title</p>
+                        <p class="ml-auto">Avg/5</p>
+                    </div>
+                    <p class="text-white">This is a description</p>
+                </div>
             </div>
-            <p class="truncate">this is a description</p>
         </div>
     </div>
-    
 </body>
 </html>
