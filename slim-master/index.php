@@ -85,6 +85,44 @@ $app->get('/getActorsByMovie', function (Request $request, Response $response, $
 });
 
 
+
+
+
+
+
+
+$app->get('/getReviewAverageByMovie', function (Request $request, Response $response, $args) {
+    $return = [];
+    $conn = Database::getDatabase();
+
+    $body = $request->getQueryParams();
+    $id = $body["id"];
+
+    $query = "SELECT reviews.*
+                FROM reviews
+                WHERE movie_id = $id";
+    $result = $conn->query($query);
+
+    if ($result->num_rows == 0) {
+        $return["error"] = "nessun attore trovato, id film : " . $id ;
+    } else {
+        while ($row = $result->fetch_assoc()) {
+            //passa anche i dati dell account che ha fatto la review
+            $temp = new Review($row["id"], $row["rating"], $row["movie_id"], $row["account_id"], $row["content"]);
+            $return[] = $temp->toArray();
+        }
+    
+    }
+
+    // Chiudi la connessione al database quando hai finito
+    $conn->close();
+
+    $response->getBody()->write(json_encode($return));
+
+    return $response;
+});
+
+
 $app->run();
 
 
