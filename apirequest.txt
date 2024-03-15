@@ -1,3 +1,11 @@
 /getReviewAverageByMovie
 movieId int
 media dei voti delle riview
+
+/getDescription
+movieId: int
+descrizione del film: string
+
+/getReviewsByMovie
+movieId: int
+array di review
