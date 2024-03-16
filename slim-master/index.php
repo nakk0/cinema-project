@@ -7,6 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . "/classi/Database.php";
 require __DIR__ . "/classi/Movie.php";
 require __DIR__ . "/classi/Actor.php";
+require __DIR__ . "/classi/Genre.php";
 //sopra non toccare poi cancella questo quando finito
 //require i file delle classi
 session_cache_limiter(false);
@@ -57,8 +58,8 @@ $app->get('/getActorsByMovie', function (Request $request, Response $response, $
     $return = [];
     $conn = Database::getDatabase();
 
-    $body = $request->getQueryParams();
-    $id = $body["id"];
+    $body = json_decode($request->getBody(), true); // Decodifica il JSON nel corpo della richiesta
+    $id = $body["id"] ?? null; // Ottiene il valore "id" dal JSON
 
     $query = "SELECT actors.*
                 FROM actors
@@ -91,24 +92,72 @@ $app->get('/getActorsByMovie', function (Request $request, Response $response, $
 
 
 
+
 $app->get('/getReviewAverageByMovie', function (Request $request, Response $response, $args) {
     $return = [];
     $conn = Database::getDatabase();
 
-    $body = $request->getQueryParams();
-    $id = $body["id"];
+    $body = json_decode($request->getBody(), true);
 
-    $query = "SELECT reviews.*
-                FROM reviews
-                WHERE movie_id = $id";
+    if (isset($body["id"])) {
+        $id = $body["id"];
+
+        $query = "SELECT AVG(rating) as av
+                    FROM reviews
+                    WHERE movie_id = ?";
+
+        $stmt = $conn->prepare($query);
+
+        $stmt->bind_param("i", $id);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result) {
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $return = $row["av"];
+            } else {
+                $return["error"] = "Il film non ha recensioni";
+            }
+        } else {
+            $return["error"] = "Errore nella query: " . $conn->error;
+        }
+
+        $stmt->close();
+    } else {
+        $return["error"] = "Il campo 'id' non è presente nel corpo della richiesta";
+    }
+
+    $conn->close();
+
+    $response->getBody()->write(json_encode($return));
+
+    return $response;
+});
+
+
+
+
+
+
+
+$app->get('/getMovieByGenre', function (Request $request, Response $response, $args) {
+    $return = [];
+    $conn = Database::getDatabase();
+
+    $body = json_decode($request->getBody(), true); // Decodifica il JSON nel corpo della richiesta
+    $id = $body["id"] ?? null; // Ottiene il valore "id" dal JSON
+
+    $query = "SELECT * FROM `movies` JOIN genres_movies ON genres_movies.movie_id = movies.id WHERE genres_movies.genre_id = $id;";
     $result = $conn->query($query);
 
     if ($result->num_rows == 0) {
-        $return["error"] = "nessun attore trovato, id film : " . $id ;
+        $return["error"] = "nessun film con il genere " .  $id;
     } else {
         while ($row = $result->fetch_assoc()) {
-            //passa anche i dati dell account che ha fatto la review
-            $temp = new Review($row["id"], $row["rating"], $row["movie_id"], $row["account_id"], $row["content"]);
+            $temp = new Movie($row["id"], $row["title"], $row["release_date"], $row["original_language"], $row["description"], $row["director"], $row["poster"], $row["lenght"]);
             $return[] = $temp->toArray();
         }
     
@@ -121,6 +170,50 @@ $app->get('/getReviewAverageByMovie', function (Request $request, Response $resp
 
     return $response;
 });
+
+
+
+
+
+
+
+
+// /getGenreByMovie
+// Idmovie number
+// json di oggetti Genre
+
+
+$app->get('/getGenreByMovie', function (Request $request, Response $response, $args) {
+    $return = [];
+    $conn = Database::getDatabase();
+
+    $body = json_decode($request->getBody(), true); // Decodifica il JSON nel corpo della richiesta
+    $id = $body["id"] ?? null; // Ottiene il valore "id" dal JSON
+
+    $query = "SELECT * FROM `genres` JOIN genres_movies ON genres_movies.genre_id = genres.id WHERE genres_movies.movie_id = $id;";
+    $result = $conn->query($query);
+
+    if ($result->num_rows == 0) {
+        $return["error"] = "nessun film con il genere " .  $id;
+    } else {
+        while ($row = $result->fetch_assoc()) {
+            $temp = new Genre($row["id"], $row["name"]);
+            $return[] = $temp->toArray();
+        }
+    
+    }
+
+    // Chiudi la connessione al database quando hai finito
+    $conn->close();
+
+    $response->getBody()->write(json_encode($return));
+
+    return $response;
+});
+
+
+
+
 
 
 $app->run();
