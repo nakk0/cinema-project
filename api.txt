@@ -1,13 +1,10 @@
-/getMovieByGenre
-genre string
-json di oggetti movie
+---------------------TO DO-----------------
 
 
 
 
-/getGenreByMovie
-Idmovie number
-json di oggetti Genre
+
+
 
 
 
@@ -23,9 +20,18 @@ json di oggetti Review
 Id (movie)
 json di oggetti Actors
 
-/getMovie*
 
+/getMovie*
 json di oggetti movie
+
+
+/getMovieByGenre
+genre string
+json di oggetti movie
+
+/getGenreByMovie
+Idmovie number
+json di oggetti Genre
 
 
 
